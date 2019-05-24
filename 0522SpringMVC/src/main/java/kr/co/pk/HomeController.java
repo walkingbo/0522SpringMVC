@@ -3,7 +3,9 @@ package kr.co.pk;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.pk.domain.DataList;
+import kr.co.pk.domain.DataModel;
 import kr.co.pk.service.ViewService;
 
 
@@ -63,5 +67,71 @@ public class HomeController {
 		return "excel";
 	}
 	
+	@RequestMapping(value = "data.pdf", method=RequestMethod.GET)
+	public String pdf(Model model) {
+		//pdf 파일에 출력할 데이터를 생성
+		List<Map<String,String>> list = new ArrayList<>();
+		Map<String,String> map = new HashMap<>();
+		map.put("OS","Windows");
+		map.put("IDE","Eclipse");
+		list.add(map);
+		
+		map = new HashMap<>();
+		map.put("OS","Mac");
+		map.put("IDE","STS");
+		list.add(map);
+		
+		//데이터를 전달하기 위해서 저장
+		model.addAttribute("list",list);
+		
+		return "pdf";
+	}
+	@RequestMapping(value = "view.json", method=RequestMethod.GET)
+	public String json(Model model) {
+		//json으로 출력할 데이터를 생성
+		List<Map<String,String>> list = new ArrayList<>();
+		Map<String,String> map = new HashMap<>();
+		map.put("OS","Windows");
+		map.put("IDE","Eclipse");
+		list.add(map);
+		
+		map = new HashMap<>();
+		map.put("OS","Mac");
+		map.put("IDE","STS");
+		list.add(map);
+		
+		//데이터를 전달하기 위해서 저장
+		model.addAttribute("list",list);
+		
+		return "json";
+	}
 	
+	@RequestMapping(value = "data.xml", method=RequestMethod.GET)
+	public String xml(Model model) {
+		DataModel model1 = new DataModel();
+		model1.setTitle("csv");
+		model1.setContent("구분자로 구분한 문자열");
+		
+		DataModel model2 = new DataModel();
+		model2.setTitle("xml");
+		model2.setContent("태그를 이용한 방법");
+		
+		DataModel model3 = new DataModel();
+		model3.setTitle("json");
+		model3.setContent("자바스크립트 문자열");
+		
+		List<DataModel> list =
+				new ArrayList<>();
+		list.add(model1);
+		list.add(model2);
+		list.add(model3);
+		
+		DataList dataList = new DataList();
+		dataList.setList(list);
+		
+		//데이터를 전달하기 위해서 저장
+		model.addAttribute("list",dataList);
+		
+		return "xml";
+	}
 }
